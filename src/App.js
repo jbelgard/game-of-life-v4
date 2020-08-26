@@ -12,8 +12,8 @@ const operations = [
   [1, 0],
 ]
 
-const numRows = 50;
-const numCols = 50;
+const numRows = 30;
+const numCols = 42;
 
 const App = () => {
   const [grid, setGrid] = useState(() => {
@@ -24,8 +24,32 @@ const App = () => {
     return rows;
   });
 
+  const effer = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  const symmetry = (arr, x) => {
+    const newArr = [];
+    let half = arr / 2;
+    console.log("Half", half);
+    let res = 0;
+    if (x > half) {
+      let x2 = x - half;
+      let x3 = half - x2;
+      res = x3
+      newArr.push(x, x3);
+    } else if (x < half) {
+      let x2 = half - x;
+      let x3 = half + x2;
+      res = x3
+      newArr.push(x, x3);
+    } else {
+      newArr.push(x);
+      res = half
+    }
+    return [x, res]
+  };
+  
   const makeEmptyGrid = () => {
-    const rows = []
+    const rows = [];  
     for (let i = 0; i < numRows; i++) {
       rows.push(Array.from(Array(numCols), () => 0));
     }
@@ -35,18 +59,18 @@ const App = () => {
   const [running, setRunning] = useState(false);
 
   const runningRef = useRef(running);
-  runningRef.current = running
+  runningRef.current = running;
 
-  const speeds = {med : 100, fast : 10, slow : 1000}
-  const [speed, setSpeed] = useState(100)
+  const speeds = {med : 100, fast : 10, slow : 1000};
+  const [speed, setSpeed] = useState(100);
 
-  const speedRef = useRef(speed)
-  speedRef.current = speed
+  const speedRef = useRef(speed);
+  speedRef.current = speed;
 
   console.log("Speed", speed)
   
   const runSimulation = useCallback(() => {
-    if(!runningRef.current) {
+    if (!runningRef.current) {
       return;
     }
 
@@ -64,27 +88,29 @@ const App = () => {
             });
             if (neighbors < 2 || neighbors > 3) {
               gridCopy[i][k] = 0;              
-            } else if (g[i][k] === 0 && neighbors === 3) {
-              gridCopy[i][k] = 1;
-            }
+            } else if (g[i][k] === 0 && neighbors === 3) gridCopy[i][k] = 1;
           }
-        }
+        }        
       });
     });
     setTimeout(runSimulation, speeds[speedRef.current]);
   }, [])
 
   const [color, setColor] = useState ('red')
-  const colors = ['red', 'orange', 'yellow', 'yellowgreen', 'blue', 'white', 'magenta', 'cyan', 'chartreuse', 'black']
+  const colors = ['red', 'orange', 'yellow', 'yellowgreen', 'blue', 'white', 'magenta', 'cyan', 'chartreuse', 'black'];
 
   return (
     <>
+    <div>
+      <h1>Conway's Game of Life</h1>
+      <h4>By Jason Belgard</h4>
+    </div>
       <button
         onClick = {() => {
           setRunning(!running);
           if(!running) {
             runningRef.current = true;
-            runSimulation()
+            runSimulation();
           }
         }}
       >
@@ -92,7 +118,7 @@ const App = () => {
       </button>
       <button
         onClick = {() => {
-          setGrid(makeEmptyGrid)
+          setGrid(makeEmptyGrid);
         }}
       >
         Clear Grid
@@ -101,7 +127,8 @@ const App = () => {
         onClick = {() => {
           const rows = [];
           for (let i = 0; i < numRows; i++) {
-            rows.push(Array.from(Array(numCols), () => Math.random() > 0.5 ? 1 : 0));
+            rows.push(Array.from(Array(numCols), () => (Math.random() > 0.5 ? 1 : 0))
+            );
           }
           setGrid(rows);
         }}
@@ -109,37 +136,85 @@ const App = () => {
         Random
       </button>
 
-      <form type = "submit"
-        className = 'colors'
+      <button
+        onClick = {() => {
+          const glider = [];
+          const rows2 = [];
+          for (let i = 0; i < numRows; i++) {
+            glider.push(Array.from(Array(numCols), () => 0));
+          }
+          glider [1][1] = glider [2][2] = glider [3][2] = glider[3][1] = glider [3][0] = 1;
+          glider [1][40] = glider [2][39] = glider [3][40] = glider [3][41] = 1;
+          console.log("glider", glider);
+          setGrid(glider);
+        }}
       >
+        Glider
+      </button>
+
+      <button
+        onClick = {() => {
+          const glider = [];
+          for (let i = 0; i < numRows; i++) {
+            glider.push(Array.from(Array(numCols), () => 0));
+          }
+          glider[2][21] = glider[3][21] = glider[3][20] = glider[4][22] = glider[4][23] = glider[4][24] = glider[4][20] = glider[4][19] = glider[4][18] = glider[5][24] = glider[5][18] = glider[6][24] = glider[6][18] = glider[6][25] = glider[6][17] = glider[7][25] = glider[7][17] = glider[7][26] = glider[7][16] = glider[6][17] = glider[8][25] = glider[8][24] = glider[8][18] = glider[8][17] = glider[9][18] = glider[9][24] = glider[10][18] = glider[10][19] = glider[10][20] = glider[10][24] = glider[10][23] = glider[10][22] = glider[11][20] = glider[11][21] = glider[11][22] = glider[12][21] = 1;
+          setGrid(glider);
+        }}
+      >
+        Box
+      </button>
+
+      <button
+        onClick = {() => {
+
+         let arr= []
+          let g =  symmetry(numRows, 15) 
+          let z = symmetry(numCols,21)
+          let [gOne, gTwo] = g
+          let[zOne, zTwo] = z
+           console.log('G', gOne +=1, "Z", z)
+          for ( let i = 0; i<numRows; i ++) {
+           arr.push(Array.from(Array(numCols), () => 0));
+           }
+
+            arr[gOne][zOne] = arr[gTwo][zTwo] = arr[gOne+=1][zOne+=1] = arr[gTwo+=1][zTwo+=1] = arr[gOne+=1][zOne+=1] = arr[gTwo+=1][zTwo+=1] = arr[gOne+=1][zOne+=1] = arr[gTwo+=1][zTwo+=1] = arr[gOne][zOne] = arr[gTwo][zTwo] = arr[gOne+=1][zOne+=1] = arr[gTwo+=1][zTwo+=1] = arr[gOne+=1][zOne+=1] = arr[gTwo+=1][zTwo+=1] = arr[gOne+=1][zOne+=1] = arr[gTwo+=1][zTwo+=1] = 1;
+           setGrid(arr);
+        }}
+      >
+        Test
+      </button>
+      
+      <form type = "submit" className = "colors">
         <label htmlFor = "color">
-        <h4 style = {{color: `${color}`}}>Color</h4>
+          <h4 style = {{ color: `$color}`}}>Color</h4>
           <select
-            id = 'type'
+            id = "type"
             value = {color}
-            onChange = {e => setColor(e.target.value)}
+            onChange = {(e) => setColor(e.target.value)}
           >
-            <option style = {{color: `${color}`}}> {color.color}</option>
-            {colors.map (color => (
-              <option style = {{backgroundColor: `${color}` }}key = {color} value = {color}>
+            <option style = {{ color: `${color}` }}> {color.color}</option>
+            {colors.map((color) => (
+              <option
+                style = {{ backgroundColor: `${color}` }}
+                key = {color}
+                value = {color}
+              >
                 {color}
               </option>
             ))}
           </select>
         </label>
       </form>
-
-      <form type = 'submit'
-        className = 'speedForm'
-      >
+      <form type = "submit" className = "speedForm">
         <label htmlFor = "speed">
           <h3>Speed</h3>
           <select
-            id = 'type'
+            id = "type"
             value = {speed}
-            onChange = {e => setSpeed(e.target.value)}
+            onChange = {(e) => setSpeed(e.target.value)}
           >
-            <option value = {speed.med}>Med</option>
+            <option value = {speed.med}>Medium</option>
             <option value = {speed.fast}>Fast</option>
             <option value = {speed.slow}>Slow</option>
           </select>
@@ -170,6 +245,9 @@ const App = () => {
               }}
             />            
           )))}
+      </div>
+      <div>
+        <h3>The Rules of the Game of Life</h3>
       </div>
     </>
   );
