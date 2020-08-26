@@ -248,6 +248,14 @@ const App = () => {
       </div>
       <div>
         <h3>The Rules of the Game of Life</h3>
+        <ol>
+          <li>Any live cell with fewer than 2 live neighbors dies, as if by underpopulation.</li>
+          <li>Any live cell with 2 or 3 live neighbors lives on to the next generation.</li>
+          <li>Any live cell with more than 3 live neighbors dies, as if by overpopulation.</li>
+          <li>Any dead cell with exactly 3 live neighbors becomes alive as if by reproduction.</li>
+        </ol>
+        <h4>Conway's Game of Life vs Turing</h4>
+        <p>It is through looking at how gliders interact with other objects that we see how it coorelates to Turing.  If 2 gliders are shot at a block in a specific position, the block will move closer to the source of the gliders.  If 3 gliders are shot, in the perfect way, the block will move further away.  You can use this to simulate a counter and then construct logic gates such as simple AND, OR, and NOT using gliders.  That would build a pattern that acts as a finite state machine connected to 2 counters.  Giving it the same computational power as a universal Turing Machine.  So, the GOL is as powerful in theory as any computer with unlimited memory and no time constraints; it is Turing complete.</p>
       </div>
     </>
   );
