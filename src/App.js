@@ -214,9 +214,9 @@ const App = () => {
             value = {speed}
             onChange = {(e) => setSpeed(e.target.value)}
           >
-            <option value = {speed.med}>Medium</option>
-            <option value = {speed.fast}>Fast</option>
-            <option value = {speed.slow}>Slow</option>
+            <option value = {speed.fast}>Rabbit</option>
+            <option value = {speed.medium}>Human</option>
+            <option value = {speed.slow}>Turtle</option>
           </select>
         </label>
       </form>
